@@ -18,17 +18,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.force.api.streaming.client.BayeuxHandshakeRequest.StreamingConnectionType;
-import com.force.api.streaming.client.BayeuxHandshakeRequest.StreamingVersionType;
-
 /**
  * 
- * This is a CometD client written at Salesforce for testing every request and response per the protocol.
+ * This is a CometD client written at Salesforce for trying every request and response per the protocol.
  *
  * @author gwester
  */
-public class StreamingTestClient {
-    private static final Logger logger = Logger.getLogger(StreamingTestClient.class.getName());
+public class StatelessStreamingClient {
+    private static final Logger logger = Logger.getLogger(StatelessStreamingClient.class.getName());
 
     protected final HttpClient httpClient = new HttpClient();
     protected String cookieValues;
@@ -45,9 +42,9 @@ public class StreamingTestClient {
      * @param sid The Salesforce Session ID.
      * @throws Exception
      */
-    public StreamingTestClient(String protocolAndHostname, String sid) throws Exception {
+    public StatelessStreamingClient(String protocolAndHostname, String sid) {
         if(!protocolAndHostname.contains("http")) {
-            throw new IllegalStateException("Must include protocol");
+            throw new IllegalArgumentException("Must include protocol");
         }
         
         if(protocolAndHostname.lastIndexOf("/") == protocolAndHostname.length()) {
@@ -61,9 +58,33 @@ public class StreamingTestClient {
         this.sid = sid;
 
         httpClient.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
-        httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(StreamingTestUtil.CONN_TIMEOUT);
-        httpClient.getParams().setSoTimeout(30 * 1000);
-     }
+        
+        //max time to wait to connect
+        httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(30 * 1000);
+        
+        //max time to hold a completed connection for
+        httpClient.getParams().setSoTimeout(120 * 1000);
+    }
+    
+    public static List<BayeuxEventResponse> castRawMessagesToBayeuxEvents(List<String> jsonMessages) throws StreamingApiException {
+     	List<BayeuxEventResponse> bayeuxMessages = new ArrayList<BayeuxEventResponse>();
+     	for(String jsonMessage : jsonMessages) {
+    		// bayeux error handling
+    		BayeuxErrorStubResponse error = 
+    				StreamingApiMessage.jsonParser().fromJson(jsonMessage, BayeuxErrorStubResponse.class);
+    		if (error != null && error.hasError() != null) {
+    			if(error.hasError()) {
+    				throw new StreamingApiException(error.getError());     //throws new exception
+    			}
+    		} else {
+    			bayeuxMessages.add(StreamingApiMessage.jsonParser().fromJson(jsonMessage, BayeuxEventResponse.class));
+    		}
+    	}
+
+    	// Let's return our collection of 1 or more JSON messages.
+    	return bayeuxMessages;
+    }
+    
 
     /**
      * A default handshake request.
@@ -72,14 +93,14 @@ public class StreamingTestClient {
      * This method deletes all local storage of events.
      * 
      * @return
+     * @throws Exception 
      * @throws IOException
      * @throws StreamingApiException 
      * @throws HttpException
      */
     public BayeuxHandshakeResponse sendHandshakeRequest() throws Exception {
         // set up a default handshake
-        BayeuxHandshakeRequest handy = new BayeuxHandshakeRequest(StreamingVersionType.VERSION_1,
-                StreamingConnectionType.LONG_POLLING);
+        BayeuxHandshakeRequest handy = new BayeuxHandshakeRequest();
         return sendHandshakeRequest(handy);
     }
 
@@ -159,6 +180,10 @@ public class StreamingTestClient {
         return StreamingApiMessage.jsonParser().fromJson(jsonResponse, BayeuxDisconnectResponse.class);
     }
     
+    public List<BayeuxEventResponse> longPoll(String clientId) throws Exception {
+    	return longPoll(new BayeuxConnectRequest(clientId));
+    }
+    
     public List<BayeuxEventResponse> longPoll(BayeuxConnectRequest connectionRequest) throws Exception {
         List<String> possibleEvents = sendRequest(connectionRequest);
 
@@ -193,11 +218,13 @@ public class StreamingTestClient {
      *            A bayeux message in JSON, such as a Handshake, Connect, Subscribe, Unsubscribe, or Disconnect
      * @return The JSON response from the server, or a null string if an HTTP error occurs. This is a JSON array!
      *         [{"foo":"bar"}{"foo":"bar2"}]
+     * @throws JSONException 
+     * @throws IOException 
      * @throws Exception 
      * @throws AuthenticationInvalidException 
      * @throws HttpException
      */
-    public List<String> sendRequest(StreamingApiRequest ... requests) throws Exception {
+    public List<String> sendRequest(StreamingApiRequest ... requests) throws JSONException, HttpException, IOException {
         String json = createJsonArray(requests);
 
         // set up an HTTP POST
@@ -229,12 +256,12 @@ public class StreamingTestClient {
 
         // null response handling
         if (responseBody == null || responseBody.isEmpty()) {
-            throw new Exception("The server response was null, with status code HTTP " + code);
+            throw new StreamingApiException("The server response was null, with status code HTTP " + code);
         }
         
         // HTTP error handling
         if(code != 200) {
-            throw new Exception(method.getStatusText());
+            throw new StreamingApiException(method.getStatusText());
         }
         List<String> bayeuxMessages = parseJsonArray(responseBody);
 
@@ -293,4 +320,6 @@ public class StreamingTestClient {
             }
         }
     }
+    
+    
 }

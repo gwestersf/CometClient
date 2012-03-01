@@ -1,6 +1,5 @@
 package com.force.api.streaming.client;
 
-import com.force.api.streaming.client.BayeuxHandshakeRequest.StreamingConnectionType;
 
 /**
  * A Bayeux Connect message sent from the client to the server.
@@ -11,7 +10,7 @@ public class BayeuxConnectRequest extends StreamingApiRequest {
     // REQUIRED request fields
     private final String channel = "/meta/connect";
     private final String clientId;
-    private final String connectionType;
+    private final String connectionType = "long-polling";
     private BayeuxAdviceRequest advice;
 
     // OPTIONAL response fields
@@ -23,19 +22,9 @@ public class BayeuxConnectRequest extends StreamingApiRequest {
      * @param clientId
      * @param connectionType
      */
-    public BayeuxConnectRequest(String clientId, String connectionType, BayeuxAdviceRequest advice) {
+    public BayeuxConnectRequest(String clientId, BayeuxAdviceRequest advice) {
         this.clientId = clientId;
-        this.connectionType = connectionType;
         this.advice = advice;
-    }
-
-    /**
-     * Constructor with strong typing.
-     * @param clientId
-     * @param connectionType
-     */
-    public BayeuxConnectRequest(String clientId, StreamingConnectionType connectionType) {
-        this(clientId, connectionType.toString(), null);
     }
 
     /**
@@ -43,7 +32,7 @@ public class BayeuxConnectRequest extends StreamingApiRequest {
      * @param clientId
      */
     public BayeuxConnectRequest(String clientId) {
-        this(clientId, StreamingConnectionType.LONG_POLLING.toString(), new BayeuxAdviceRequest());
+        this(clientId, new BayeuxAdviceRequest());
     }
 
     /**
@@ -51,7 +40,7 @@ public class BayeuxConnectRequest extends StreamingApiRequest {
      * @param lastResponse
      */
     public BayeuxConnectRequest(BayeuxHandshakeResponse lastResponse) {
-        this(lastResponse.getClientId(), StreamingConnectionType.LONG_POLLING.toString(), new BayeuxAdviceRequest());
+        this(lastResponse.getClientId(), new BayeuxAdviceRequest());
     }
     
     /**
