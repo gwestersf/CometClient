@@ -1,10 +1,9 @@
-package test.util.api.streaming;
+package com.force.api.streaming.client;
 
 /**
  * Any Streaming API JSON response can be deserialized into this message, to find errors.
  * 
  * @author gwester
- * @since 172
  */
 public class BayeuxErrorStubResponse {
     private Boolean successful;

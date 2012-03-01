@@ -1,10 +1,9 @@
-package test.util.api.streaming;
+package com.force.api.streaming.client;
 
 /**
  * Bayeux protocol subscribe object, for requests on /meta/subscribe
  * 
  * @author gwester
- * @since 172
  */
 public class BayeuxSubscribeRequest extends StreamingApiRequest {
     // REQUIRED request fields

@@ -1,10 +1,9 @@
-package test.util.api.streaming;
+package com.force.api.streaming.client;
 
 /**
  * These snippets can appear in any response from the server.
  * 
  * @author gwester
- * @since 172
  */
 public class BayeuxAdviceResponse {
     private String reconnect;

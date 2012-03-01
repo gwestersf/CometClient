@@ -1,12 +1,11 @@
-package test.util.api.streaming;
+package com.force.api.streaming.client;
 
-import test.util.api.streaming.BayeuxHandshakeRequest.StreamingConnectionType;
+import com.force.api.streaming.client.BayeuxHandshakeRequest.StreamingConnectionType;
 
 /**
  * A Bayeux Connect message sent from the client to the server.
  * 
  * @author gwester
- * @since 172
  */
 public class BayeuxConnectRequest extends StreamingApiRequest {
     // REQUIRED request fields

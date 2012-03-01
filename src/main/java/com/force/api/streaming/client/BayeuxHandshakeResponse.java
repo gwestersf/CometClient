@@ -1,10 +1,9 @@
-package test.util.api.streaming;
+package com.force.api.streaming.client;
 
 import java.util.Set;
 
 /**
  * @author gwester
- * @since 172
  */
 public class BayeuxHandshakeResponse extends StreamingApiResponse {
     // REQUIRED response fields

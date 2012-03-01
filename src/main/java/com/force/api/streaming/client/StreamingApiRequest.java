@@ -1,5 +1,10 @@
-package test.util.api.streaming;
+package com.force.api.streaming.client;
 
+/**
+ * Base class for all Streaming API JSON requests.
+ * 
+ * @author gwester
+ */
 public abstract class StreamingApiRequest extends StreamingApiMessage {
     
     public abstract String getChannel();

@@ -1,4 +1,4 @@
-package test.util.api.streaming;
+package com.force.api.streaming.client;
 
 import java.util.Map;
 
@@ -6,7 +6,6 @@ import java.util.Map;
  * {"channel":"/topic/prodtest","data":{"event":{"type":"created","createdDate":"2011-08-10T20:29:54.000+0000"},"sobject":{"Name":"0","Id":"001D000000J51BKIAZ"}}}
  * 
  * @author gwester
- * @since 170
  */
 public class BayeuxEventResponse {
     // REQUIRED

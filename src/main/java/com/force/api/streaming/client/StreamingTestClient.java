@@ -1,4 +1,4 @@
-package test.util.api.streaming;
+package com.force.api.streaming.client;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -18,15 +18,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import test.util.api.streaming.BayeuxHandshakeRequest.StreamingConnectionType;
-import test.util.api.streaming.BayeuxHandshakeRequest.StreamingVersionType;
+import com.force.api.streaming.client.BayeuxHandshakeRequest.StreamingConnectionType;
+import com.force.api.streaming.client.BayeuxHandshakeRequest.StreamingVersionType;
 
 /**
  * 
  * This is a CometD client written at Salesforce for testing every request and response per the protocol.
  *
  * @author gwester
- * @since 172
  */
 public class StreamingTestClient {
     private static final Logger logger = Logger.getLogger(StreamingTestClient.class.getName());

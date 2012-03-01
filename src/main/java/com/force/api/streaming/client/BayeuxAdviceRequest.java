@@ -1,11 +1,10 @@
-package test.util.api.streaming;
+package com.force.api.streaming.client;
 
 /**
  * 
  * This class is for sending the client's socket timeout up to the server.
  *
  * @author gwester
- * @since 172
  */
 public class BayeuxAdviceRequest {
     private final int timeout;

@@ -1,11 +1,10 @@
-package test.util.api.streaming;
+package com.force.api.streaming.client;
 
 /**
  * This message allows you to send any JSON message to cometd that you want.
  * For use with the Streaming API client.
  * 
- * @author dpham, gwester
- * @since 172
+ * @author gwester
  */
 public class SpoofableStreamingMessage extends StreamingApiRequest {
     private final String json;

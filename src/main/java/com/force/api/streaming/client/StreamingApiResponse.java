@@ -1,12 +1,11 @@
-package test.util.api.streaming;
+package com.force.api.streaming.client;
 
 import java.util.regex.Pattern;
 
 /**
- * Base class for all Streaming API JSON resposnes.
+ * Base class for all Streaming API JSON responses.
  * 
  * @author gwester
- * @since 172
  */
 public abstract class StreamingApiResponse extends StreamingApiMessage {
     

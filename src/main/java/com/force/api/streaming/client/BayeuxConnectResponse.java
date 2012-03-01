@@ -1,8 +1,7 @@
-package test.util.api.streaming;
+package com.force.api.streaming.client;
 
 /**
  * @author gwester
- * @since 172
  */
 public class BayeuxConnectResponse extends StreamingApiResponse {
     // REQUIRED

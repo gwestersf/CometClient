@@ -1,18 +1,16 @@
-package test.util.api.streaming;
+package com.force.api.streaming.client;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * This is a utility that wraps the cometd client written at Salesforce.
  * 
  * @author gwester
- * @since 172
  */
 public class StreamingTestUtil {
 	
-    //private static final Logger logger = Logger.getLogger(StreamingTestUtil.class.getName());
+    //private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(StreamingTestUtil.class.getName());
     
     //streaming wide defaults
     public static final int CONN_TIMEOUT = 30 * 1000;
@@ -103,6 +101,5 @@ public class StreamingTestUtil {
     public List<BayeuxEventResponse> longPoll() throws Exception {
         return streamingClient.longPoll(connectionRequest);
     }
-    
  
 }

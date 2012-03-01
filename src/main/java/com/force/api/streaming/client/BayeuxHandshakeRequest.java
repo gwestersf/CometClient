@@ -1,4 +1,4 @@
-package test.util.api.streaming;
+package com.force.api.streaming.client;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -7,7 +7,6 @@ import java.util.Set;
  * Bayeux protocol handshake object, for requests on /meta/handshake
  * 
  * @author gwester
- * @since 172
  */
 public class BayeuxHandshakeRequest extends StreamingApiRequest {
     // REQUIRED request fields

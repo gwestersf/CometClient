@@ -1,4 +1,4 @@
-package test.util.api.streaming;
+package com.force.api.streaming.client;
 
 import com.google.gson.Gson;
 
@@ -6,7 +6,6 @@ import com.google.gson.Gson;
  * Parent class for all Streaming API messages - request OR response.
  * 
  * @author gwester
- * @since 172
  */
 public abstract class StreamingApiMessage {
 
